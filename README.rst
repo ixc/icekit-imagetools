@@ -11,8 +11,8 @@ To install
 Includes:
 =========
 
-Image tiles generator
----------------------
+Zoom tiles generator
+--------------------
 
 Converter to sRGB
 -----------------

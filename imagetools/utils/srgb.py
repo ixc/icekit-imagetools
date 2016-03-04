@@ -1,8 +1,11 @@
 from PIL import Image, ImageCms
-import tempfile
+from tempfile import NamedTemporaryFile
+import os
 
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-with open('srgb.icc') as srgb:
+with open(os.path.join(__location__, 'srgb.icc')) as srgb:
     SRGB_BYTES = srgb.read()
 SRGB_PROFILE = ImageCms.createProfile("sRGB")
 
@@ -20,10 +23,17 @@ def convert_to_srgb(infile, outfile):
 
     img = Image.open(infile)
     # get its color profile, write to a temp file
-    icc = tempfile.mkstemp(suffix='.icc')[1]
-    with open(icc, 'w') as f:
-        f.write(img.info.get('icc_profile'))
-    img = ImageCms.profileToProfile(img, icc, SRGB_PROFILE, outputMode="RGB")
+    # icc_file, icc_path = tempfile.mkstemp(suffix='.icc')
+    icc_file = NamedTemporaryFile(suffix='.icc', delete=True)
+    # with open(icc_path, 'w') as f:
+
+    profile = img.info.get('icc_profile')
+    if profile:
+        icc_file.write(profile)
+        icc_file.flush()
+        img = ImageCms.profileToProfile(img, icc_file.name, SRGB_PROFILE, outputMode="RGB")
+
     img.save(outfile, icc_profile=SRGB_BYTES)
 
+    icc_file.close()
     return outfile

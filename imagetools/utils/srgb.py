@@ -25,3 +25,5 @@ def convert_to_srgb(infile, outfile):
         f.write(img.info.get('icc_profile'))
     img = ImageCms.profileToProfile(img, icc, SRGB_PROFILE, outputMode="RGB")
     img.save(outfile, icc_profile=SRGB_BYTES)
+
+    return outfile

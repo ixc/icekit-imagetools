@@ -17,7 +17,7 @@ if {'bdist_wheel', 'sdist'}.intersection(sys.argv):
         long_description = pypandoc.convert('README.md', 'rst')
 
 setuptools.setup(
-    name='...',
+    name='imagetools',
     use_scm_version={'version_scheme': 'post-release'},  # Get version from git tags.
     author='Interaction Consortium',
     author_email='studio@interaction.net.au',

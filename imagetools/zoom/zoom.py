@@ -81,17 +81,20 @@ class ZoomImageCreator(object):
             storage=None,
     ):
         """
-        Generate a pyramid of Deepzoom tiles based on the given file
+        Generate a pyramid of Deepzoom tiles based on the given file.
+
+        The path at `destination_path` will be created, and will contain `image_files` - the folder of tiles, and
+        image.dzi, the descriptive metadata.
 
         :param input_file: a File object containing the source image
-        :param destination_path: the folder, relative to the given storage, to store the file
+        :param destination_path: the folder, relative to the given storage, to store the files.
         :return:
         """
         if storage is None:
             storage = default_storage
 
         for level in xrange(self.descriptor.num_levels):
-            level_dir = os.path.join(destination_path, str(level))
+            level_dir = os.path.join(destination_path, "image_files", str(level))
 
             try:
                 # for local storage, create the parent folder

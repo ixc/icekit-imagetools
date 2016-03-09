@@ -19,7 +19,7 @@ RESIZE_FILTERS = {
     'bicubic': PIL.Image.BICUBIC,
     'nearest': PIL.Image.NEAREST,
     'antialias': PIL.Image.ANTIALIAS,
-    }
+}
 
 
 class ZoomImageCreator(object):

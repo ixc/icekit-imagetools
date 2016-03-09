@@ -10,8 +10,7 @@ Adapted to use Django default storage.
 import PIL
 import os
 from django.core.files.storage import default_storage
-from zoom_descriptor import DeepZoomImageDescriptor
-
+from imagetools.zoom.zoom_descriptor import DeepZoomImageDescriptor
 
 
 RESIZE_FILTERS = {

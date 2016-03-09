@@ -5,6 +5,13 @@ import os
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
+# Pillow needs to be built with Color Management
+# Install lcms with e.g.
+# $ sudo apt-get install liblcms2-dev
+# then
+# pip install pillow
+
+# TODO: fail gracefully if lcms isn't available
 with open(os.path.join(__location__, 'srgb.icc')) as srgb:
     SRGB_BYTES = srgb.read()
 SRGB_PROFILE = ImageCms.createProfile("sRGB")
@@ -20,6 +27,8 @@ def convert_to_srgb(infile, outfile):
     :param outfile: the destination path to write to
     :return: None
     """
+
+    # TODO: issue a warning and just copy the file if lcms isn't available.
 
     img = Image.open(infile)
     # get its color profile, write to a temp file

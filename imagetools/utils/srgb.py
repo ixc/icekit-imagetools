@@ -1,3 +1,5 @@
+from logging import warning
+
 from PIL import Image, ImageCms
 from tempfile import NamedTemporaryFile
 import os
@@ -14,7 +16,12 @@ __location__ = os.path.realpath(
 # TODO: fail gracefully if lcms isn't available
 with open(os.path.join(__location__, 'srgb.icc')) as srgb:
     SRGB_BYTES = srgb.read()
-SRGB_PROFILE = ImageCms.createProfile("sRGB")
+
+try:
+    SRGB_PROFILE = ImageCms.createProfile("sRGB")
+except ImportError: # probably
+    warning("Couldn't create sRGB profile. Try compiling Pillow with little-cms support.")
+    SRGB_PROFILE = None
 
 
 def convert_to_srgb(infile, outfile):
@@ -29,6 +36,8 @@ def convert_to_srgb(infile, outfile):
     """
 
     # TODO: issue a warning and just copy the file if lcms isn't available.
+    if not SRGB_PROFILE:
+        return infile # no-op
 
     img = Image.open(infile)
     # get its color profile, write to a temp file

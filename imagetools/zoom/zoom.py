@@ -101,7 +101,7 @@ class ZoomImageCreator(object):
                 os.makedirs(p)
             except OSError: # already exists
                 pass
-            except NotImplemented: # not a local storage
+            except NotImplementedError: # not a local storage
                 pass
 
             level_image = self.get_image(level)

@@ -3,6 +3,7 @@ from logging import warning
 from PIL import Image, ImageCms
 from tempfile import NamedTemporaryFile
 import os
+from PIL.ImageCms import PyCMSError
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -49,7 +50,10 @@ def convert_to_srgb(infile, outfile):
     if profile:
         icc_file.write(profile)
         icc_file.flush()
-        img = ImageCms.profileToProfile(img, icc_file.name, SRGB_PROFILE, outputMode="RGB")
+        try:
+            img = ImageCms.profileToProfile(img, icc_file.name, SRGB_PROFILE, outputMode="RGB")
+        except PyCMSError:
+            pass # no-op
 
     img.save(outfile, icc_profile=SRGB_BYTES)
 

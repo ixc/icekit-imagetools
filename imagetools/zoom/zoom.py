@@ -7,6 +7,7 @@ https://github.com/openzoom/deepzoom.py/blob/develop/deepzoom.py
 Adapted to use Django default storage.
 """
 
+import cStringIO
 import PIL
 import os
 from django.core.files.storage import default_storage
@@ -107,17 +108,21 @@ class ZoomImageCreator(object):
             level_image = self.get_image(level)
             for (column, row) in self.tiles(level):
                 bounds = self.descriptor.get_tile_bounds(level, column, row)
-                tile = level_image.crop(bounds)
+                tile_img = level_image.crop(bounds)
                 format = self.descriptor.tile_format
-                tile_path = os.path.join(level_dir,
-                                         '%s_%s.%s'%(column, row, format))
-                tile_file = storage.open(tile_path, 'wb')
-                print tile_path
+
+                # save the image to an in-memory string
+                mem_file = cStringIO.StringIO()
                 if self.descriptor.tile_format == 'jpg':
                     jpeg_quality = int(self.image_quality * 100)
-                    tile.save(tile_file, 'JPEG', quality=jpeg_quality)
+                    tile_img.save(mem_file, 'JPEG', quality=jpeg_quality)
                 else:
-                    tile.save(tile_file)
-                tile_file.close()
+                    tile_img.save(mem_file)
+
+                tile_path = os.path.join(level_dir,
+                                         '%s_%s.%s'%(column, row, format))
+                print tile_path
+                storage.save(tile_path, mem_file)
+
         # Create descriptor
         self.descriptor.save(os.path.join(destination_path, 'image.dzi'), storage)

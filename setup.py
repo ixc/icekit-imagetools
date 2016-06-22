@@ -21,7 +21,7 @@ setuptools.setup(
     use_scm_version={'version_scheme': 'post-release'},  # Get version from git tags.
     author='Interaction Consortium',
     author_email='studio@interaction.net.au',
-    url='https://github.com/ixc/ixc-imagetools',
+    url='https://github.com/ixc/icekit-imagetools',
     description='Doing cool things to images since 2016',
     long_description=locals().get('long_description', ''),
     license='MIT',

@@ -1,6 +1,6 @@
-==============
-ixc-imagetools
-==============
+=================
+icekit-imagetools
+=================
 
 Doing cool things to images since 2016.
 

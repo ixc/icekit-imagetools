@@ -29,7 +29,6 @@ setuptools.setup(
     include_package_data=True,
     install_requires=[
         'Pillow >= 3.0.0',
-        'colorweave',
     ],
     # extras_require=[
     #     ...
